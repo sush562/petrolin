@@ -14,4 +14,24 @@ class FuelRepositoryImpl extends FuelRepository {
     final FuelEntryListEntity data = await database.getAllFuelEntries();
     return FuelEntryMapper.convertToList(data);
   }
+
+  @override
+  Future<void> deleteFuelEntry(int id) async {
+    return database.deleteFuelEntry(id);
+  }
+
+  @override
+  Future<FuelEntry?> getFuelEntry(int id) async {
+    final data = await database.getFuelEntry(id);
+    if (data == null) {
+      return null;
+    } else {
+      return FuelEntryMapper.transformToModel(data);
+    }
+  }
+
+  @override
+  Future<int> insertFuelEntry(FuelEntry row) async {
+    return await database.insertFuelEntry(FuelEntryMapper.transformToMap(row));
+  }
 }

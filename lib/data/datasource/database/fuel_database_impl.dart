@@ -19,11 +19,13 @@ class FuelDatabaseImpl extends FuelDatabase {
   }
 
   //Fuel Entry
+  @override
   Future<int> insertFuelEntry(FuelEntryEntity row) async {
     final db = await database;
     return await db.insert(_fuelAddTableName, row);
   }
 
+  @override
   Future<void> deleteFuelEntry(int id) async {
     final db = await database;
     await db.delete(_fuelAddTableName,
@@ -34,6 +36,18 @@ class FuelDatabaseImpl extends FuelDatabase {
   Future<FuelEntryListEntity> getAllFuelEntries() async {
     final db = await database;
     final FuelEntryListEntity response = await db.query(_fuelAddTableName);
+    return response;
+  }
+
+  @override
+  Future<FuelEntryEntity?> getFuelEntry(int id) async {
+    final db = await database;
+    final FuelEntryListEntity responseList = await db.query(_fuelAddTableName,
+        where: '${FuelEntry.columnId} = ?', whereArgs: [id]);
+    FuelEntryEntity? response;
+    if (responseList.isNotEmpty) {
+      response = responseList[0];
+    }
     return response;
   }
 
