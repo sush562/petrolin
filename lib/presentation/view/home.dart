@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petrolin/presentation/view/add_petrol_details.dart';
+import 'package:petrolin/presentation/view/add_fuel_details.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

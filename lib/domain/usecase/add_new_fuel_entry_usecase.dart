@@ -2,7 +2,8 @@ import 'package:petrolin/domain/model/fuel_entry.dart';
 import 'package:petrolin/domain/repository/fuel_repository.dart';
 
 abstract class AddNewFuelEntryUseCase {
-  Future<int> addFuelEntry(double fuelCost, String fuelType);
+  Future<int> addFuelEntry(
+      double fuelCost, String fuelType, DateTime currentTime);
 }
 
 class AddNewFuelEntryUseCaseImpl extends AddNewFuelEntryUseCase {
@@ -11,8 +12,8 @@ class AddNewFuelEntryUseCaseImpl extends AddNewFuelEntryUseCase {
   AddNewFuelEntryUseCaseImpl(this._fuelRepository);
 
   @override
-  Future<int> addFuelEntry(double fuelCost, String fuelType) async {
-    final currentTime = DateTime.now();
+  Future<int> addFuelEntry(
+      double fuelCost, String fuelType, DateTime currentTime) async {
     final data = FuelEntry(
         fuelCost: fuelCost, fuelType: fuelType, entryTime: currentTime);
 

@@ -5,4 +5,5 @@ abstract class FuelDatabase {
   Future<void> deleteFuelEntry(int id);
   Future<int> insertFuelEntry(FuelEntryEntity row);
   Future<FuelEntryEntity?> getFuelEntry(int id);
+  Future<double> getSumOfFuelCost();
 }

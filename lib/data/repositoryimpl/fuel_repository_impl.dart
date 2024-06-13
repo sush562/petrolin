@@ -34,4 +34,9 @@ class FuelRepositoryImpl extends FuelRepository {
   Future<int> insertFuelEntry(FuelEntry row) async {
     return await database.insertFuelEntry(FuelEntryMapper.transformToMap(row));
   }
+
+  @override
+  Future<double> getTotalCost() async {
+    return await database.getSumOfFuelCost();
+  }
 }

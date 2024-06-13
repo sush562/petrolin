@@ -51,6 +51,16 @@ class FuelDatabaseImpl extends FuelDatabase {
     return response;
   }
 
+  @override
+  Future<double> getSumOfFuelCost() async {
+    final db = await database;
+    var result =
+        await db.rawQuery('SELECT SUM(fuelCost) as total FROM fuel_entries');
+    final totalResult = result.first['total'];
+    double total = totalResult == null ? 0.0 : totalResult as double;
+    return total;
+  }
+
   //Fuel price
   Future<int> insertCurrentFuelPrice(FuelEntryEntity row) async {
     final db = await database;
