@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:petrolin/presentation/view/add_fuel_details.dart';
+import 'package:petrolin/presentation/viewmodel/home_viewmodel.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final viewmodel = ref.watch(homeViewModelNotifierProvider);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.primary,
@@ -27,11 +30,15 @@ class HomeScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const Text(
-                "Your total expenditure of Petrol till date is Rs 5000",
-                style: TextStyle(
-                  fontSize: 20,
+              viewmodel.when(
+                data: (cost) => Text(
+                  "Your total expenditure of Petrol till date is Rs $cost",
+                  style: const TextStyle(
+                    fontSize: 20,
+                  ),
                 ),
+                error: (e, __) => const Text('Error'),
+                loading: () => const Text('Fetching total fuel cost...'),
               ),
               Center(
                 child: ElevatedButton(

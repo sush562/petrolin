@@ -25,7 +25,7 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
       context: context,
       initialDate: _selectedDate,
       firstDate: DateTime(1990),
-      lastDate: DateTime(DateTime.now().year),
+      lastDate: _selectedDate,
     );
 
     if (picked != null && picked != _selectedDate) {
