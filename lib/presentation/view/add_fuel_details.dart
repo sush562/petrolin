@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:petrolin/presentation/viewmodel/add_fuel_details_viewmodel.dart';
 
 class AddPetrolDetailsScreen extends ConsumerStatefulWidget {
-  const AddPetrolDetailsScreen({super.key});
+  final int id;
+
+  const AddPetrolDetailsScreen({super.key, this.id = 0});
 
   @override
   ConsumerState<AddPetrolDetailsScreen> createState() {
@@ -19,6 +21,32 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
   final TextEditingController _amountEditingController =
       TextEditingController();
   late AddFuelDetailViewModel _addFuelDetailViewModel;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _addFuelDetailViewModel = ref.read(addFuelDetailsViewModelNotifier);
+    _dateController =
+        TextEditingController(text: "${_selectedDate.toLocal()}".split(' ')[0]);
+    if (widget.id > 0) {
+      _loadExistingEntry(widget.id);
+    } else {
+      _isLoading = false;
+    }
+  }
+
+  void _loadExistingEntry(int id) async {
+    final existingEntry = await _addFuelDetailViewModel.getFuelEntryById(id);
+    if (existingEntry != null) {
+      setState(() {
+        _amountEditingController.text = existingEntry.fuelCost.toString();
+        _selectedDate = existingEntry.entryTime;
+        _dateController.text = "${_selectedDate.toLocal()}".split(' ')[0];
+        _isLoading = false;
+      });
+    }
+  }
 
   void _pickDate() async {
     DateTime? picked = await showDatePicker(
@@ -37,74 +65,115 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _addFuelDetailViewModel = ref.read(addFuelDetailsViewModelNotifier);
-    _dateController =
-        TextEditingController(text: "${_selectedDate.toLocal()}".split(' ')[0]);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        title: const Text(
-          "Add Petrol Details",
-          style: TextStyle(color: Colors.white),
+        title: Text(
+          widget.id > 0 ? "Update Petrol Details" : "Add Petrol Details",
+          style: const TextStyle(color: Colors.white),
         ),
+        actions: widget.id > 0
+            ? [
+                IconButton(
+                    onPressed: () {
+                      _showDeleteConfirmationDialog();
+                    },
+                    icon: const Icon(Icons.delete))
+              ]
+            : [],
       ),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            TextFormField(
-                controller: _amountEditingController,
-                decoration:
-                    const InputDecoration(hintText: 'Enter Fuel Amount'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter valid amount';
-                  }
-                  return null;
-                },
-                style: const TextStyle(fontSize: 10),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}'))
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                      controller: _amountEditingController,
+                      decoration:
+                          const InputDecoration(hintText: 'Enter Fuel Amount'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter valid amount';
+                        }
+                        return null;
+                      },
+                      style: const TextStyle(fontSize: 10),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'^\d*\.?\d{0,2}'))
+                      ],
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true)),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: _dateController,
+                    decoration: const InputDecoration(
+                      labelText: "Select Date",
+                      suffixIcon: Icon(Icons.calendar_today),
+                    ),
+                    readOnly: true,
+                    onTap: () => _pickDate(),
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _submitFuelEntry(context);
+                      }
+                    },
+                    child: Text(widget.id > 0 ? 'Update' : 'Submit'),
+                  )
                 ],
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true)),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _dateController,
-              decoration: const InputDecoration(
-                labelText: "Select Date",
-                suffixIcon: Icon(Icons.calendar_today),
               ),
-              readOnly: true,
-              onTap: () => _pickDate(),
             ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _submitFuelEntry(context);
-                }
-              },
-              child: const Text('Submit'),
-            )
-          ],
-        ),
-      ),
     );
   }
 
   void _submitFuelEntry(BuildContext context) async {
-    final int insert = await _addFuelDetailViewModel.addNewFuelEntry(
-        double.parse(_amountEditingController.text), _selectedDate);
-    if (insert > 0) {
-      // ignore: use_build_context_synchronously
-      Navigator.pop(context);
+    if (widget.id > 0) {
+      await _addFuelDetailViewModel.updateFuelEntry(
+        widget.id,
+        double.parse(_amountEditingController.text),
+        _selectedDate,
+      );
+    } else {
+      await _addFuelDetailViewModel.addNewFuelEntry(
+        double.parse(_amountEditingController.text),
+        _selectedDate,
+      );
     }
+    Navigator.pop(context);
+  }
+
+  void _showDeleteConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Entry'),
+          content: const Text('Are you sure you want to delete this entry?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _deleteEntry(widget.id);
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _deleteEntry(int id) async {
+    await _addFuelDetailViewModel.deleteEntry(id);
+    Navigator.pop(context);
   }
 }
