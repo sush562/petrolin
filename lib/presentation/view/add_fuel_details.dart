@@ -53,7 +53,7 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
       context: context,
       initialDate: _selectedDate,
       firstDate: DateTime(1990),
-      lastDate: _selectedDate,
+      lastDate: DateTime.now(),
     );
 
     if (picked != null && picked != _selectedDate) {
@@ -85,47 +85,53 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                      controller: _amountEditingController,
-                      decoration:
-                          const InputDecoration(hintText: 'Enter Fuel Amount'),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter valid amount';
-                        }
-                        return null;
-                      },
-                      style: const TextStyle(fontSize: 10),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(
-                            RegExp(r'^\d*\.?\d{0,2}'))
-                      ],
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: true)),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: _dateController,
-                    decoration: const InputDecoration(
-                      labelText: "Select Date",
-                      suffixIcon: Icon(Icons.calendar_today),
+          : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                        controller: _amountEditingController,
+                        decoration: const InputDecoration(
+                            labelText: 'Enter Fuel Amount'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter valid amount';
+                          }
+                          return null;
+                        },
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp(r'^\d*\.?\d{0,2}'),
+                          )
+                        ],
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true)),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: _dateController,
+                      decoration: const InputDecoration(
+                        labelText: "Select Date",
+                        suffixIcon: Icon(Icons.calendar_today),
+                      ),
+                      readOnly: true,
+                      onTap: () => _pickDate(),
                     ),
-                    readOnly: true,
-                    onTap: () => _pickDate(),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _submitFuelEntry(context);
-                      }
-                    },
-                    child: Text(widget.id > 0 ? 'Update' : 'Submit'),
-                  )
-                ],
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          _submitFuelEntry(context);
+                        }
+                      },
+                      child: Text(widget.id > 0 ? 'Update' : 'Submit'),
+                    )
+                  ],
+                ),
               ),
             ),
     );

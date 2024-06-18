@@ -23,7 +23,7 @@ class AddFuelDetailViewModel {
   ) async {
     final AddNewFuelEntryUseCase prov =
         _ref.read(addNewFuelEntryUseCaseProvider);
-    final result = await prov.addFuelEntry(fuelCost, 'petrol', currentTime);
+    final result = await prov.addFuelEntry(fuelCost, 'Petrol', currentTime);
     _ref.read(homeViewModelNotifierProvider.notifier).updateValue();
     return result;
   }

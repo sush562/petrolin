@@ -14,7 +14,7 @@ class HomeScreen extends ConsumerWidget {
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.primary,
           title: const Text(
-            "Home Page",
+            "Fuel Entry",
             style: TextStyle(color: Colors.white),
           ),
         ),

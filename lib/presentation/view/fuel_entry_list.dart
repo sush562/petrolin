@@ -19,34 +19,45 @@ class FuelEntryListScreen extends ConsumerWidget {
       ),
       body: viewmodel.when(
         data: (fuelEntries) {
+          if (fuelEntries.isEmpty) {
+            return const Center(
+              child: Text(
+                'No Entries',
+                style: TextStyle(fontSize: 18),
+              ),
+            );
+          }
           return ListView.builder(
             itemCount: fuelEntries.length,
             itemBuilder: (context, index) {
               final fuelEntry = fuelEntries[index];
-              return ListTile(
-                title: Text(
-                  style: const TextStyle(
-                    fontSize: 20,
-                  ),
-                  '${fuelEntry.fuelType} - \$${fuelEntry.fuelCost.toStringAsFixed(2)}',
-                ),
-                subtitle: Text(
-                  style: const TextStyle(
-                    fontSize: 18,
-                  ),
-                  '${fuelEntry.entryTime.toLocal()}',
-                ),
-                onTap: () {
-                  int fuelId = fuelEntry.id!;
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AddPetrolDetailsScreen(
-                        id: fuelId,
-                      ),
+              return Card(
+                margin: const EdgeInsets.all(10.0),
+                child: ListTile(
+                  title: Text(
+                    style: const TextStyle(
+                      fontSize: 20,
                     ),
-                  );
-                },
+                    '${fuelEntry.fuelType} - Rs ${fuelEntry.fuelCost.toStringAsFixed(2)}',
+                  ),
+                  subtitle: Text(
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
+                    '${fuelEntry.entryTime.toLocal()}'.split(' ')[0],
+                  ),
+                  onTap: () {
+                    int fuelId = fuelEntry.id!;
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddPetrolDetailsScreen(
+                          id: fuelId,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               );
             },
           );
