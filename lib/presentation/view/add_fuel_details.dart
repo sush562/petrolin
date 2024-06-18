@@ -77,7 +77,7 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
             ? [
                 IconButton(
                     onPressed: () {
-                      _showDeleteConfirmationDialog();
+                      _showDeleteConfirmationDialog(context);
                     },
                     icon: const Icon(Icons.delete))
               ]
@@ -147,7 +147,7 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
     Navigator.pop(context);
   }
 
-  void _showDeleteConfirmationDialog() {
+  void _showDeleteConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -156,13 +156,13 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
           content: const Text('Are you sure you want to delete this entry?'),
           actions: <Widget>[
             TextButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.pop(context),
               child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
-                _deleteEntry(widget.id);
+                Navigator.pop(context);
+                _deleteEntry(widget.id, context);
               },
               child: const Text('Delete'),
             ),
@@ -172,7 +172,7 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
     );
   }
 
-  void _deleteEntry(int id) async {
+  void _deleteEntry(int id, BuildContext context) async {
     await _addFuelDetailViewModel.deleteEntry(id);
     Navigator.pop(context);
   }

@@ -56,10 +56,11 @@ class HomeScreen extends ConsumerWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const AddPetrolDetailsScreen()));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AddPetrolDetailsScreen(),
+                      ),
+                    );
                   },
                   child: const Text('Add Petrol'),
                 ),

@@ -5,6 +5,7 @@ import 'package:petrolin/domain/usecase/delete_fuel_entry_usecase.dart';
 import 'package:petrolin/domain/usecase/get_fuel_entry_list_usecase.dart';
 import 'package:petrolin/domain/usecase/get_fuel_entry_usecase.dart';
 import 'package:petrolin/domain/usecase/get_total_fuel_cost_usecase.dart';
+import 'package:petrolin/domain/usecase/update_fuel_entry_usecase.dart';
 
 final getFuelEntryListUseCaseProvider = Provider<GetFuelEntryListUseCase>(
     (ref) => GetFuelEntryListUseCaseImpl(ref.watch(fuelRepositoryProvider)));
@@ -16,3 +17,5 @@ final deleteFuelEntryUseCaseProvider = Provider<DeleteFuelEntryUseCase>(
     (ref) => DeleteFuelEntryUseCaseImpl(ref.watch(fuelRepositoryProvider)));
 final getTotalCostUseCaseProvider = Provider<GetTotalCostUseCase>(
     (ref) => GetTotalCostUseCaseImpl(ref.watch(fuelRepositoryProvider)));
+final getUpdateFuelEntryUseCaseProvider = Provider<UpdateFuelEntryUseCase>(
+    (ref) => UpdateFuelEntryUseCaseImpl(ref.watch(fuelRepositoryProvider)));

@@ -4,6 +4,8 @@ import 'package:petrolin/domain/model/fuel_entry.dart';
 import 'package:petrolin/domain/usecase/add_new_fuel_entry_usecase.dart';
 import 'package:petrolin/domain/usecase/delete_fuel_entry_usecase.dart';
 import 'package:petrolin/domain/usecase/get_fuel_entry_usecase.dart';
+import 'package:petrolin/domain/usecase/update_fuel_entry_usecase.dart';
+import 'package:petrolin/presentation/viewmodel/fuel_entry_list_viewmodel.dart';
 import 'package:petrolin/presentation/viewmodel/home_viewmodel.dart';
 
 final addFuelDetailsViewModelNotifier = Provider<AddFuelDetailViewModel>((ref) {
@@ -26,23 +28,26 @@ class AddFuelDetailViewModel {
     return result;
   }
 
-  Future<int> updateFuelEntry(
+  Future<void> updateFuelEntry(
     int id,
     double fuelCost,
     DateTime currentTime,
   ) async {
-    final AddNewFuelEntryUseCase prov =
-        _ref.read(addNewFuelEntryUseCaseProvider);
-    final result = await prov.addFuelEntry(fuelCost, 'petrol', currentTime);
+    final UpdateFuelEntryUseCase prov =
+        _ref.read(getUpdateFuelEntryUseCaseProvider);
+    final FuelEntry entry = FuelEntry(
+        id: id, fuelCost: fuelCost, fuelType: 'Petrol', entryTime: currentTime);
+    await prov.execute(entry);
+    _ref.read(fuelEntryListViewmodelNotifier.notifier).updateValue();
     _ref.read(homeViewModelNotifierProvider.notifier).updateValue();
-    return result;
   }
 
   Future<void> deleteEntry(int id) async {
     final DeleteFuelEntryUseCase prov =
         _ref.read(deleteFuelEntryUseCaseProvider);
     final result = prov.execute(id);
-
+    _ref.read(fuelEntryListViewmodelNotifier.notifier).updateValue();
+    _ref.read(homeViewModelNotifierProvider.notifier).updateValue();
     return result;
   }
 

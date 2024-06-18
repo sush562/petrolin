@@ -31,4 +31,8 @@ class FuelEntryListViewmodel extends AutoDisposeAsyncNotifier<List<FuelEntry>> {
       return Future.error(e, stack);
     }
   }
+
+  Future<void> updateValue() async {
+    await _getFuelEntryList();
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:petrolin/presentation/view/add_fuel_details.dart';
 import 'package:petrolin/presentation/viewmodel/fuel_entry_list_viewmodel.dart';
 
 class FuelEntryListScreen extends ConsumerWidget {
@@ -35,6 +36,17 @@ class FuelEntryListScreen extends ConsumerWidget {
                   ),
                   '${fuelEntry.entryTime.toLocal()}',
                 ),
+                onTap: () {
+                  int fuelId = fuelEntry.id!;
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddPetrolDetailsScreen(
+                        id: fuelId,
+                      ),
+                    ),
+                  );
+                },
               );
             },
           );

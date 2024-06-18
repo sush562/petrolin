@@ -61,6 +61,15 @@ class FuelDatabaseImpl extends FuelDatabase {
     return total;
   }
 
+  @override
+  Future<int> updateFuelEntry(int id, FuelEntryEntity row) async {
+    final db = await database;
+    return db.update(_fuelAddTableName, row,
+        where: '${FuelEntry.columnId} = ?',
+        whereArgs: [id],
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
   //Fuel price
   Future<int> insertCurrentFuelPrice(FuelEntryEntity row) async {
     final db = await database;
