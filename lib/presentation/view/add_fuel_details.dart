@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:petrolin/data/entity/fuel_types.dart';
+import 'package:petrolin/domain/model/fuel_price_per_liter.dart';
 import 'package:petrolin/presentation/viewmodel/add_fuel_details_viewmodel.dart';
 
 class AddPetrolDetailsScreen extends ConsumerStatefulWidget {
@@ -22,8 +25,11 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
   late TextEditingController _dateController;
   final TextEditingController _amountEditingController =
       TextEditingController();
+  final TextEditingController _amountFuelPriceLiterEditingController =
+      TextEditingController();
   late AddFuelDetailViewModel _addFuelDetailViewModel;
   bool _isLoading = true;
+  double _fuelPricePerLiter = 0.0;
 
   @override
   void initState() {
@@ -34,8 +40,24 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
     if (widget.id > 0) {
       _loadExistingEntry(widget.id);
     } else {
-      _isLoading = false;
+      _loadFuelCosts();
     }
+  }
+
+  void _loadFuelCosts() async {
+    _addFuelDetailViewModel.petrolPerLiterPrice =
+        await _addFuelDetailViewModel.getPricePerLiterFuelType(petrol);
+    _addFuelDetailViewModel.dieselPerLiterPrice =
+        await _addFuelDetailViewModel.getPricePerLiterFuelType(diesel);
+    if (_addFuelDetailViewModel.petrolPerLiterPrice != null) {
+      _fuelPricePerLiter =
+          _addFuelDetailViewModel.petrolPerLiterPrice!.fuelPerLiterCost;
+    }
+    setState(() {
+      _amountFuelPriceLiterEditingController.text =
+          _fuelPricePerLiter.toString();
+      _isLoading = false;
+    });
   }
 
   void _loadExistingEntry(int id) async {
@@ -45,6 +67,10 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
         _amountEditingController.text = existingEntry.fuelCost.toString();
         _selectedDate = existingEntry.entryTime;
         _dateController.text = "${_selectedDate.toLocal()}".split(' ')[0];
+        _selectedFuelType = existingEntry.fuelType;
+        _fuelPricePerLiter = existingEntry.fuelPerLiterCost;
+        _amountFuelPriceLiterEditingController.text =
+            _fuelPricePerLiter.toString();
         _isLoading = false;
       });
     }
@@ -72,7 +98,7 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text(
-          widget.id > 0 ? "Update Petrol Details" : "Add Petrol Details",
+          widget.id > 0 ? "Update Fuel Details" : "Add Fuel Details",
           style: const TextStyle(color: Colors.white),
         ),
         actions: widget.id > 0
@@ -87,10 +113,10 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Form(
-                key: _formKey,
+          : Form(
+              key: _formKey,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
                     TextFormField(
@@ -124,24 +150,57 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
                       onTap: () => _pickDate(),
                     ),
                     const SizedBox(height: 10),
-                    DropdownButton(
-                        value: _selectedFuelType,
-                        items: fuelTypes.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          _selectedFuelType = newValue!;
-                        }),
-                    ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          _submitFuelEntry(context);
-                        }
-                      },
-                      child: Text(widget.id > 0 ? 'Update' : 'Submit'),
+                    TextFormField(
+                        controller: _amountFuelPriceLiterEditingController,
+                        decoration: const InputDecoration(
+                            labelText: 'Enter Fuel Price Per Liter'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter valid amount';
+                          }
+                          return null;
+                        },
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(
+                            RegExp(r'^\d*\.?\d{0,2}'),
+                          )
+                        ],
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true)),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        const Text('Fuel Type: '),
+                        const SizedBox(width: 16),
+                        DropdownButton(
+                            value: _selectedFuelType,
+                            items: fuelTypes.map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                _selectedFuelType = newValue!;
+                              });
+                            }),
+                      ],
+                    ),
+                    const Spacer(),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            _submitFuelEntry(context);
+                          }
+                        },
+                        child: Text(widget.id > 0 ? 'Update' : 'Submit'),
+                      ),
                     )
                   ],
                 ),
@@ -153,17 +212,17 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
   void _submitFuelEntry(BuildContext context) async {
     if (widget.id > 0) {
       await _addFuelDetailViewModel.updateFuelEntry(
-        widget.id,
-        double.parse(_amountEditingController.text),
-        _selectedDate,
-        _selectedFuelType,
-      );
+          widget.id,
+          double.parse(_amountEditingController.text),
+          _selectedDate,
+          _selectedFuelType,
+          double.parse(_amountFuelPriceLiterEditingController.text));
     } else {
       await _addFuelDetailViewModel.addNewFuelEntry(
-        double.parse(_amountEditingController.text),
-        _selectedDate,
-        _selectedFuelType,
-      );
+          double.parse(_amountEditingController.text),
+          _selectedDate,
+          _selectedFuelType,
+          double.parse(_amountFuelPriceLiterEditingController.text));
     }
     Navigator.pop(context);
   }

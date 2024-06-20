@@ -7,4 +7,7 @@ abstract class FuelDatabase {
   Future<int> updateFuelEntry(int id, FuelEntryEntity row);
   Future<FuelEntryEntity?> getFuelEntry(int id);
   Future<double> getSumOfFuelCost();
+
+  Future<FuelEntryEntity?> getPricePerLiterFuelType(String fuelType);
+  Future<int> addUpdateFuelPricePerLiter(FuelEntryEntity data);
 }

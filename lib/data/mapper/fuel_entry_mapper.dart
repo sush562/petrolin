@@ -8,6 +8,7 @@ class FuelEntryMapper {
       fuelCost: data[FuelEntry.columnFuelCost],
       fuelType: data[FuelEntry.columnFuelType],
       entryTime: DateTime.parse(data[FuelEntry.columnEntryTime]),
+      fuelPerLiterCost: data[FuelEntry.columnFuelPerLiterCost],
     );
   }
 
@@ -17,6 +18,7 @@ class FuelEntryMapper {
       FuelEntry.columnFuelCost: data.fuelCost,
       FuelEntry.columnFuelType: data.fuelType,
       FuelEntry.columnEntryTime: data.entryTime.toIso8601String(),
+      FuelEntry.columnFuelPerLiterCost: data.fuelPerLiterCost,
     };
   }
 

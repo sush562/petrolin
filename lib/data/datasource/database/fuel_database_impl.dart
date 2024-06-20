@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:petrolin/data/datasource/database/fuel_database.dart';
 import 'package:petrolin/data/datasource/entity/fuel_entity.dart';
 import 'package:petrolin/domain/model/fuel_entry.dart';
+import 'package:petrolin/domain/model/fuel_price_per_liter.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -72,15 +73,31 @@ class FuelDatabaseImpl extends FuelDatabase {
   }
 
   //Fuel price
-  Future<int> insertCurrentFuelPrice(FuelEntryEntity row) async {
+  @override
+  Future<FuelEntryEntity?> getPricePerLiterFuelType(String fuelType) async {
     final db = await database;
-    return await db.insert(_currentFuelPriceTableName, row);
+    List<FuelEntryEntity> response = await db.query(_currentFuelPriceTableName,
+        where: '${FuelPricePerLiter.columnFuelType} = ?',
+        whereArgs: [fuelType]);
+    if (response.isEmpty) {
+      return null;
+    } else {
+      return response[0];
+    }
   }
 
-  Future<void> deleteCurrentFuelPrice(int id) async {
+  @override
+  Future<int> addUpdateFuelPricePerLiter(FuelEntryEntity data) async {
     final db = await database;
-    await db.delete(_currentFuelPriceTableName,
-        where: '${FuelEntry.columnId} = ?', whereArgs: [id]);
+    final int? id = data['id'];
+    if (id == null || id == 0) {
+      return await db.insert(_currentFuelPriceTableName, data);
+    } else {
+      return await db.update(_currentFuelPriceTableName, data,
+          where: '${FuelPricePerLiter.columnId} = ?',
+          whereArgs: [id],
+          conflictAlgorithm: ConflictAlgorithm.replace);
+    }
   }
 
   Future<Database> _initDatabase() async {
@@ -92,15 +109,16 @@ class FuelDatabaseImpl extends FuelDatabase {
             ${FuelEntry.columnId} INTEGER PRIMARY KEY,
             ${FuelEntry.columnFuelCost} REAL NOT NULL,
             ${FuelEntry.columnFuelType} TEXT NOT NULL,
-            ${FuelEntry.columnEntryTime} TEXT NOT NULL
+            ${FuelEntry.columnEntryTime} TEXT NOT NULL,
+            ${FuelEntry.columnFuelPerLiterCost} REAL NOT NULL
           )
       ''');
       db.execute('''
           CREATE TABLE $_currentFuelPriceTableName(
-            ${FuelEntry.columnId} INTEGER PRIMARY KEY,
-            ${FuelEntry.columnFuelCost} REAL NOT NULL,
-            ${FuelEntry.columnFuelType} TEXT NOT NULL,
-            ${FuelEntry.columnEntryTime} TEXT NOT NULL
+            ${FuelPricePerLiter.columnId} INTEGER PRIMARY KEY,
+            ${FuelPricePerLiter.columnFuelPerLiterCost} REAL NOT NULL,
+            ${FuelPricePerLiter.columnFuelType} TEXT NOT NULL,
+            ${FuelPricePerLiter.columnEntryTime} TEXT NOT NULL
           )
       ''');
     }, version: _databaseVersion);
