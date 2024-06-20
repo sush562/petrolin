@@ -11,62 +11,61 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final viewmodel = ref.watch(homeViewModelNotifierProvider);
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          title: const Text(
-            "Fuel Entry",
-            style: TextStyle(color: Colors.white),
-          ),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: const Text(
+          "Fuel Entry",
+          style: TextStyle(color: Colors.white),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Hello User",
-                style: TextStyle(
-                  fontSize: 25,
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.bold,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Hello User",
+              style: TextStyle(
+                fontSize: 25,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            viewmodel.when(
+              data: (cost) => Text(
+                "Your total expenditure of Fuel till date is Rs $cost",
+                style: const TextStyle(
+                  fontSize: 20,
                 ),
               ),
-              viewmodel.when(
-                data: (cost) => Text(
-                  "Your total expenditure of Petrol till date is Rs $cost",
-                  style: const TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-                error: (e, __) => const Text('Error'),
-                loading: () => const Text('Fetching total fuel cost...'),
-              ),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const FuelEntryListScreen()));
-                  },
-                  child: const Text('View Petrol Fill List'),
-                ),
-              ),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
+              error: (e, __) => const Text('Error'),
+              loading: () => const Text('Fetching total fuel cost...'),
+            ),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const AddPetrolDetailsScreen(),
-                      ),
-                    );
-                  },
-                  child: const Text('Add Petrol'),
-                ),
+                          builder: (context) => const FuelEntryListScreen()));
+                },
+                child: const Text('View Fuel Fill List'),
               ),
-            ],
-          ),
-        ));
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AddPetrolDetailsScreen(),
+            ),
+          );
+        },
+        child: const Icon(Icons.add),
+      ),
+    );
   }
 }

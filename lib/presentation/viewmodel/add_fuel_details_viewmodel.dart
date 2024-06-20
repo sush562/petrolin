@@ -18,25 +18,20 @@ class AddFuelDetailViewModel {
   AddFuelDetailViewModel(this._ref);
 
   Future<int> addNewFuelEntry(
-    double fuelCost,
-    DateTime currentTime,
-  ) async {
+      double fuelCost, DateTime currentTime, String fuelType) async {
     final AddNewFuelEntryUseCase prov =
         _ref.read(addNewFuelEntryUseCaseProvider);
-    final result = await prov.addFuelEntry(fuelCost, 'Petrol', currentTime);
+    final result = await prov.addFuelEntry(fuelCost, fuelType, currentTime);
     _ref.read(homeViewModelNotifierProvider.notifier).updateValue();
     return result;
   }
 
   Future<void> updateFuelEntry(
-    int id,
-    double fuelCost,
-    DateTime currentTime,
-  ) async {
+      int id, double fuelCost, DateTime currentTime, String fuelType) async {
     final UpdateFuelEntryUseCase prov =
         _ref.read(getUpdateFuelEntryUseCaseProvider);
     final FuelEntry entry = FuelEntry(
-        id: id, fuelCost: fuelCost, fuelType: 'Petrol', entryTime: currentTime);
+        id: id, fuelCost: fuelCost, fuelType: fuelType, entryTime: currentTime);
     await prov.execute(entry);
     _ref.read(fuelEntryListViewmodelNotifier.notifier).updateValue();
     _ref.read(homeViewModelNotifierProvider.notifier).updateValue();

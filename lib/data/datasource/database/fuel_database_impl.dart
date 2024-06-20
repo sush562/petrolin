@@ -35,7 +35,8 @@ class FuelDatabaseImpl extends FuelDatabase {
   @override
   Future<FuelEntryListEntity> getAllFuelEntries() async {
     final db = await database;
-    final FuelEntryListEntity response = await db.query(_fuelAddTableName);
+    final FuelEntryListEntity response = await db.query(_fuelAddTableName,
+        orderBy: '${FuelEntry.columnEntryTime} DESC');
     return response;
   }
 

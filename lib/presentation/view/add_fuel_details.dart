@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:petrolin/data/entity/fuel_types.dart';
 import 'package:petrolin/presentation/viewmodel/add_fuel_details_viewmodel.dart';
 
 class AddPetrolDetailsScreen extends ConsumerStatefulWidget {
@@ -17,6 +18,7 @@ class AddPetrolDetailsScreen extends ConsumerStatefulWidget {
 class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
   final _formKey = GlobalKey<FormState>();
   DateTime _selectedDate = DateTime.now();
+  String _selectedFuelType = petrol;
   late TextEditingController _dateController;
   final TextEditingController _amountEditingController =
       TextEditingController();
@@ -122,6 +124,17 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
                       onTap: () => _pickDate(),
                     ),
                     const SizedBox(height: 10),
+                    DropdownButton(
+                        value: _selectedFuelType,
+                        items: fuelTypes.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          _selectedFuelType = newValue!;
+                        }),
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
@@ -143,11 +156,13 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
         widget.id,
         double.parse(_amountEditingController.text),
         _selectedDate,
+        _selectedFuelType,
       );
     } else {
       await _addFuelDetailViewModel.addNewFuelEntry(
         double.parse(_amountEditingController.text),
         _selectedDate,
+        _selectedFuelType,
       );
     }
     Navigator.pop(context);
