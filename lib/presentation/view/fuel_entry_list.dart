@@ -12,6 +12,7 @@ class FuelEntryListScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Fuel Entries",
           style: TextStyle(color: Colors.white),

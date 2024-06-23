@@ -89,7 +89,7 @@ class FuelDatabaseImpl extends FuelDatabase {
   @override
   Future<int> addUpdateFuelPricePerLiter(FuelEntryEntity data) async {
     final db = await database;
-    final int? id = data['id'];
+    final int? id = data[FuelPricePerLiter.columnId];
     if (id == null || id == 0) {
       return await db.insert(_currentFuelPriceTableName, data);
     } else {
@@ -110,7 +110,8 @@ class FuelDatabaseImpl extends FuelDatabase {
             ${FuelEntry.columnFuelCost} REAL NOT NULL,
             ${FuelEntry.columnFuelType} TEXT NOT NULL,
             ${FuelEntry.columnEntryTime} TEXT NOT NULL,
-            ${FuelEntry.columnFuelPerLiterCost} REAL NOT NULL
+            ${FuelEntry.columnFuelPerLiterCost} REAL NOT NULL,
+            ${FuelEntry.columnNotes} TEXT
           )
       ''');
       db.execute('''

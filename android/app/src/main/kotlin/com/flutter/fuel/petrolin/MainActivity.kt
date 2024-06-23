@@ -1,4 +1,4 @@
-package com.example.petrolin
+package com.flutter.fuel.petrolin
 
 import io.flutter.embedding.android.FlutterActivity
 

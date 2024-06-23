@@ -34,6 +34,9 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
     _addFuelDetailViewModel = ref.read(addFuelDetailsViewModelNotifier);
     _dateController =
         TextEditingController(text: "${_selectedDate.toLocal()}".split(' ')[0]);
+    setState(() {
+      _isLoading = true;
+    });
     if (widget.id > 0) {
       _loadExistingEntry(widget.id);
     } else {
@@ -42,10 +45,7 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
   }
 
   void _loadFuelCosts() async {
-    _addFuelDetailViewModel.petrolPerLiterPrice =
-        await _addFuelDetailViewModel.getPricePerLiterFuelType(petrol);
-    _addFuelDetailViewModel.dieselPerLiterPrice =
-        await _addFuelDetailViewModel.getPricePerLiterFuelType(diesel);
+    await _addFuelDetailViewModel.loadDefaultFuelCosts();
     if (_addFuelDetailViewModel.petrolPerLiterPrice != null) {
       _fuelPricePerLiter =
           _addFuelDetailViewModel.petrolPerLiterPrice!.fuelPerLiterCost;
@@ -73,6 +73,17 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
     }
   }
 
+  void _switchFuelType(String fuelType) {
+    print(fuelType);
+    setState(() {
+      _selectedFuelType = fuelType;
+      _fuelPricePerLiter =
+          _addFuelDetailViewModel.getFuelPrice(_selectedFuelType);
+      _amountFuelPriceLiterEditingController.text =
+          _fuelPricePerLiter.toString();
+    });
+  }
+
   void _pickDate() async {
     DateTime? picked = await showDatePicker(
       context: context,
@@ -94,6 +105,7 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           widget.id > 0 ? "Update Fuel Details" : "Add Fuel Details",
           style: const TextStyle(color: Colors.white),
@@ -179,9 +191,7 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
                               );
                             }).toList(),
                             onChanged: (String? newValue) {
-                              setState(() {
-                                _selectedFuelType = newValue!;
-                              });
+                              _switchFuelType(newValue!);
                             }),
                       ],
                     ),

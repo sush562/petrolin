@@ -12,6 +12,6 @@ class AddUpdateFuelPerLiterUsecaseImpl extends AddUpdateFuelPerLiterUsecase {
 
   @override
   Future<void> execute(FuelPricePerLiter entry) async {
-    _fuelRepository.addUpdateFuelPricePerLiter(entry);
+    await _fuelRepository.addUpdateFuelPricePerLiter(entry);
   }
 }

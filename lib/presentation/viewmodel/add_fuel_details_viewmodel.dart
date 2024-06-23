@@ -74,10 +74,20 @@ class AddFuelDetailViewModel {
         }
       }
     }
-    final result = await prov.addFuelEntry(
-        fuelCost, fuelType, currentTime, fuelPerLiterCost);
+    final result =
+        await prov.execute(fuelCost, fuelType, currentTime, fuelPerLiterCost);
     _ref.read(homeViewModelNotifierProvider.notifier).updateValue();
     return result;
+  }
+
+  double getFuelPrice(String fuelType) {
+    double price = 0.0;
+    if (fuelType == petrol && petrolPerLiterPrice != null) {
+      price = petrolPerLiterPrice!.fuelPerLiterCost;
+    } else if (fuelType == diesel && dieselPerLiterPrice != null) {
+      price = dieselPerLiterPrice!.fuelPerLiterCost;
+    }
+    return price;
   }
 
   Future<void> updateFuelEntry(int id, double fuelCost, DateTime currentTime,
@@ -115,5 +125,10 @@ class AddFuelDetailViewModel {
         _ref.read(getFuelPricePerLiterUseCaseProvider);
     final result = await prov.execute(fuelType);
     return result;
+  }
+
+  Future<void> loadDefaultFuelCosts() async {
+    petrolPerLiterPrice = await getPricePerLiterFuelType(petrol);
+    dieselPerLiterPrice = await getPricePerLiterFuelType(diesel);
   }
 }
