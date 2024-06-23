@@ -3,6 +3,7 @@ import 'package:petrolin/data/datasource/database/fuel_database.dart';
 import 'package:petrolin/data/datasource/entity/fuel_entity.dart';
 import 'package:petrolin/domain/model/fuel_entry.dart';
 import 'package:petrolin/domain/model/fuel_price_per_liter.dart';
+import 'package:petrolin/domain/model/vehicle.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -10,6 +11,7 @@ class FuelDatabaseImpl extends FuelDatabase {
   static const _databaseName = 'fuel_database';
   static const _fuelAddTableName = 'fuel_add_table';
   static const _currentFuelPriceTableName = 'current_fuel_cost_table';
+  static const _vehicleTableName = 'vehicle_table';
   static const _databaseVersion = 1;
 
   static Database? _database;
@@ -111,7 +113,9 @@ class FuelDatabaseImpl extends FuelDatabase {
             ${FuelEntry.columnFuelType} TEXT NOT NULL,
             ${FuelEntry.columnEntryTime} TEXT NOT NULL,
             ${FuelEntry.columnFuelPerLiterCost} REAL NOT NULL,
-            ${FuelEntry.columnNotes} TEXT
+            ${FuelEntry.columnNotes} TEXT,
+            ${FuelEntry.columnVehicleId} INTEGER,
+            ${FuelEntry.columnVehicleOdometerReading} INTEGER
           )
       ''');
       db.execute('''
@@ -121,6 +125,18 @@ class FuelDatabaseImpl extends FuelDatabase {
             ${FuelPricePerLiter.columnFuelType} TEXT NOT NULL,
             ${FuelPricePerLiter.columnEntryTime} TEXT NOT NULL
           )
+      ''');
+      db.execute('''
+        CREATE TABLE $_vehicleTableName(
+          ${Vehicle.columnId} INTEGER PRIMARY KEY,
+          ${Vehicle.columnVehicleName} TEXT NOT NULL,
+          ${Vehicle.columnVehicleNickName} TEXT,
+          ${Vehicle.columnVehicleFuelType} TEXT NOT NULL,
+          ${Vehicle.columnVehicleNumber} TEXT,
+          ${Vehicle.columnVehiclePUCEndDate} TEXT,
+          ${Vehicle.columnVehicleInsuranceEndDate} TEXT,
+          ${Vehicle.columnVehicleNextMaintenanceDate} TEXT
+        )
       ''');
     }, version: _databaseVersion);
   }

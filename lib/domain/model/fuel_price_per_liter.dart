@@ -9,9 +9,10 @@ class FuelPricePerLiter {
   final String fuelType;
   final DateTime entryTime;
 
-  const FuelPricePerLiter(
-      {this.id,
-      required this.fuelPerLiterCost,
-      required this.fuelType,
-      required this.entryTime});
+  const FuelPricePerLiter({
+    this.id,
+    required this.fuelPerLiterCost,
+    required this.fuelType,
+    required this.entryTime,
+  });
 }

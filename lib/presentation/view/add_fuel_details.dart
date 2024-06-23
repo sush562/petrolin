@@ -74,7 +74,6 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
   }
 
   void _switchFuelType(String fuelType) {
-    print(fuelType);
     setState(() {
       _selectedFuelType = fuelType;
       _fuelPricePerLiter =

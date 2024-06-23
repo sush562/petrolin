@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:petrolin/presentation/view/add_fuel_details.dart';
 import 'package:petrolin/presentation/view/fuel_entry_list.dart';
+import 'package:petrolin/presentation/view/info.dart';
 import 'package:petrolin/presentation/viewmodel/home_viewmodel.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -17,6 +18,19 @@ class HomeScreen extends ConsumerWidget {
           "Fuel Entry",
           style: TextStyle(color: Colors.white),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const InfoScreen(),
+                  ),
+                );
+              },
+              color: Colors.white,
+              icon: const Icon(Icons.info))
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -45,9 +59,11 @@ class HomeScreen extends ConsumerWidget {
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const FuelEntryListScreen()));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const FuelEntryListScreen(),
+                    ),
+                  );
                 },
                 child: const Text('View Fuel Fill List'),
               ),
