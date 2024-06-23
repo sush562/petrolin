@@ -1,3 +1,0 @@
-keytool -genkey -v -keystore C:\additional\Tech_Projects\FlutterProjects\petrolin\upload-keystore.jks -storetype JKS -keyalg RSA -keysize 2048 -validity 10000 -alias upload
-
-password: launch_petrol_in
