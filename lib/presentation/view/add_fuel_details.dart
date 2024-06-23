@@ -1,10 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:petrolin/data/entity/fuel_types.dart';
-import 'package:petrolin/domain/model/fuel_price_per_liter.dart';
 import 'package:petrolin/presentation/viewmodel/add_fuel_details_viewmodel.dart';
 
 class AddPetrolDetailsScreen extends ConsumerStatefulWidget {
@@ -124,22 +121,21 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
                         decoration: const InputDecoration(
                             labelText: 'Enter Fuel Amount'),
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
+                          if (value == null ||
+                              value.isEmpty ||
+                              double.parse(value) <= 0.0) {
                             return 'Please enter valid amount';
                           }
                           return null;
                         },
-                        style: const TextStyle(
-                          fontSize: 18,
-                        ),
+                        style: const TextStyle(fontSize: 18),
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
-                            RegExp(r'^\d*\.?\d{0,2}'),
-                          )
+                              RegExp(r'^\d*\.?\d{0,2}'))
                         ],
                         keyboardType: const TextInputType.numberWithOptions(
                             decimal: true)),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: _dateController,
                       decoration: const InputDecoration(
@@ -149,28 +145,27 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
                       readOnly: true,
                       onTap: () => _pickDate(),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 16),
                     TextFormField(
                         controller: _amountFuelPriceLiterEditingController,
                         decoration: const InputDecoration(
                             labelText: 'Enter Fuel Price Per Liter'),
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
+                          if (value == null ||
+                              value.isEmpty ||
+                              double.parse(value) <= 0.0) {
                             return 'Please enter valid amount';
                           }
                           return null;
                         },
-                        style: const TextStyle(
-                          fontSize: 18,
-                        ),
+                        style: const TextStyle(fontSize: 18),
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(
-                            RegExp(r'^\d*\.?\d{0,2}'),
-                          )
+                              RegExp(r'^\d*\.?\d{0,2}'))
                         ],
                         keyboardType: const TextInputType.numberWithOptions(
                             decimal: true)),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 16),
                     Row(
                       children: [
                         const Text('Fuel Type: '),
