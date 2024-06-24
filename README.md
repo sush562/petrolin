@@ -1,13 +1,13 @@
 # petrolin
-This is a flutter app designed to keep track of fuel consumption
+This is a Flutter app I designed and developed to showcase my skills as a Flutter developer and mobile architect.
 
-This is a development app for my practice in flutter. It helps users to record refueling events by entering the amount, date of refueling, cost per liter of fuel and fuel type.
+This app is a simple, offline vehicle refueling recorder. Users can record the refueling events of their vehicles so that they can keep track of their fuel expenses. It's a simple utility app related to fuel management.
 
-This is an offline app and uses no data of user from device or online as such. Please note that this app is developed independently and does not represent any company. Therefore, I assume no liability for any issues that may arise from its use.
+For the architecture design of the project, I used clean architecture in conjunction with the Riverpod Library. I ensured the classes and files were arranged in the layered format pertaining to clean architecture and Riverpod acts as a dependency injection among the layers. Please feel free to go through the code.
 
-I will be constantly improving the app overtime, adding new features.
+I have released the app on google playstore. Please do download it and let me know of any improvements.
 
-Below are some snapshpts of the app:<br>
+Below are some snapshots of the app:<br>
 <img src="https://github.com/sush562/petrolin/blob/main/images/Screenshot_20240623_153231.png" width="200">
 <img src="https://github.com/sush562/petrolin/blob/main/images/Screenshot_20240623_153214.png" width="200">
 <img src="https://github.com/sush562/petrolin/blob/main/images/Screenshot_20240623_153153.png" width="200">
