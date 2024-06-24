@@ -1,4 +1,4 @@
-# petrolin
+# PetrolIn
 This is a Flutter app I designed and developed to showcase my skills as a Flutter developer and mobile architect.
 
 This app is a simple, offline vehicle refueling recorder. Users can record the refueling events of their vehicles so that they can keep track of their fuel expenses. It's a simple utility app related to fuel management.
