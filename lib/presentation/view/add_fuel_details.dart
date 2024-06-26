@@ -132,10 +132,14 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
                         decoration: const InputDecoration(
                             labelText: 'Enter Fuel Amount'),
                         validator: (value) {
-                          if (value == null ||
-                              value.isEmpty ||
-                              double.parse(value) <= 0.0) {
+                          if (value == null || value.isEmpty) {
                             return 'Please enter valid amount';
+                          }
+                          final double? parsedValue = double.tryParse(value);
+                          if (parsedValue == null ||
+                              parsedValue <= 0.0 ||
+                              parsedValue > 9999.99) {
+                            return 'Please enter an amount between 1 and Rs 9999.99';
                           }
                           return null;
                         },
