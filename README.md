@@ -8,7 +8,7 @@ For the architecture design of the project, I used clean architecture in conjunc
 I have released the app on google playstore. Please do download it and let me know of any improvements.
 
 Below are some snapshots of the app:<br>
-<img src="https://github.com/sush562/petrolin/blob/main/images/Screenshot_20240623_153231.png" width="200">
-<img src="https://github.com/sush562/petrolin/blob/main/images/Screenshot_20240623_153214.png" width="200">
-<img src="https://github.com/sush562/petrolin/blob/main/images/Screenshot_20240623_153153.png" width="200">
-<img src="https://github.com/sush562/petrolin/blob/main/images/Screenshot_20240623_153143.png" width="200">
+<img src="https://github.com/sush562/petrolin/blob/main/images/1-Home.png" width="200">
+<img src="https://github.com/sush562/petrolin/blob/main/images/2-List.png" width="200">
+<img src="https://github.com/sush562/petrolin/blob/main/images/3-Add.png" width="200">
+<img src="https://github.com/sush562/petrolin/blob/main/images/4-Update.png" width="200">
