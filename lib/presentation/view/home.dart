@@ -45,6 +45,7 @@ class HomeScreen extends ConsumerWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            const SizedBox(height: 16),
             viewmodel.when(
               data: (cost) => Text(
                 "Your total expenditure of Fuel till date is Rs $cost",
@@ -55,7 +56,9 @@ class HomeScreen extends ConsumerWidget {
               error: (e, __) => const Text('Error'),
               loading: () => const Text('Fetching total fuel cost...'),
             ),
-            Center(
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(

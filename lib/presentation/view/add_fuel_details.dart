@@ -24,6 +24,7 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
       TextEditingController();
   final TextEditingController _amountFuelPriceLiterEditingController =
       TextEditingController();
+  final TextEditingController _notesTextController = TextEditingController();
   late AddFuelDetailViewModel _addFuelDetailViewModel;
   bool _isLoading = true;
   double _fuelPricePerLiter = 0.0;
@@ -62,6 +63,7 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
     if (existingEntry != null) {
       setState(() {
         _amountEditingController.text = existingEntry.fuelCost.toString();
+        _notesTextController.text = existingEntry.notes;
         _selectedDate = existingEntry.entryTime;
         _dateController.text = "${_selectedDate.toLocal()}".split(' ')[0];
         _selectedFuelType = existingEntry.fuelType;
@@ -102,6 +104,7 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -121,96 +124,111 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Form(
-              key: _formKey,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    TextFormField(
-                        controller: _amountEditingController,
+          : SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      TextFormField(
+                          controller: _amountEditingController,
+                          decoration: const InputDecoration(
+                              labelText: 'Enter Fuel Amount'),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter valid amount';
+                            }
+                            final double? parsedValue = double.tryParse(value);
+                            if (parsedValue == null ||
+                                parsedValue <= 0.0 ||
+                                parsedValue > 9999.99) {
+                              return 'Please enter an amount between 1 and Rs 9999.99';
+                            }
+                            return null;
+                          },
+                          style: const TextStyle(fontSize: 18),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^\d*\.?\d{0,2}'))
+                          ],
+                          keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true)),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: _dateController,
                         decoration: const InputDecoration(
-                            labelText: 'Enter Fuel Amount'),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter valid amount';
-                          }
-                          final double? parsedValue = double.tryParse(value);
-                          if (parsedValue == null ||
-                              parsedValue <= 0.0 ||
-                              parsedValue > 9999.99) {
-                            return 'Please enter an amount between 1 and Rs 9999.99';
-                          }
-                          return null;
-                        },
-                        style: const TextStyle(fontSize: 18),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                              RegExp(r'^\d*\.?\d{0,2}'))
-                        ],
-                        keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true)),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: _dateController,
-                      decoration: const InputDecoration(
-                        labelText: "Select Date",
-                        suffixIcon: Icon(Icons.calendar_today),
+                          labelText: "Select Date",
+                          suffixIcon: Icon(Icons.calendar_today),
+                        ),
+                        readOnly: true,
+                        onTap: () => _pickDate(),
                       ),
-                      readOnly: true,
-                      onTap: () => _pickDate(),
-                    ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                        controller: _amountFuelPriceLiterEditingController,
+                      const SizedBox(height: 16),
+                      TextFormField(
+                          controller: _amountFuelPriceLiterEditingController,
+                          decoration: const InputDecoration(
+                              labelText: 'Enter Fuel Price Per Liter'),
+                          validator: (value) {
+                            if (value == null ||
+                                value.isEmpty ||
+                                double.parse(value) <= 0.0) {
+                              return 'Please enter valid amount';
+                            }
+                            return null;
+                          },
+                          style: const TextStyle(fontSize: 18),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^\d*\.?\d{0,2}'))
+                          ],
+                          keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true)),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          const Text('Fuel Type: '),
+                          const SizedBox(width: 16),
+                          DropdownButton(
+                              value: _selectedFuelType,
+                              items: fuelTypes.map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                _switchFuelType(newValue!);
+                              }),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: _notesTextController,
+                        maxLines: 3,
+                        maxLength: 200,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(200),
+                        ],
                         decoration: const InputDecoration(
-                            labelText: 'Enter Fuel Price Per Liter'),
-                        validator: (value) {
-                          if (value == null ||
-                              value.isEmpty ||
-                              double.parse(value) <= 0.0) {
-                            return 'Please enter valid amount';
-                          }
-                          return null;
-                        },
-                        style: const TextStyle(fontSize: 18),
-                        inputFormatters: [
-                          FilteringTextInputFormatter.allow(
-                              RegExp(r'^\d*\.?\d{0,2}'))
-                        ],
-                        keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true)),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        const Text('Fuel Type: '),
-                        const SizedBox(width: 16),
-                        DropdownButton(
-                            value: _selectedFuelType,
-                            items: fuelTypes.map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (String? newValue) {
-                              _switchFuelType(newValue!);
-                            }),
-                      ],
-                    ),
-                    const Spacer(),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            _submitFuelEntry(context);
-                          }
-                        },
-                        child: Text(widget.id > 0 ? 'Update' : 'Submit'),
+                          border: OutlineInputBorder(),
+                          labelText: 'Enter notes (max 200 chars)',
+                        ),
                       ),
-                    )
-                  ],
+                      const SizedBox(height: 16.0),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              _submitFuelEntry(context);
+                            }
+                          },
+                          child: Text(widget.id > 0 ? 'Update' : 'Submit'),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -224,13 +242,15 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
           double.parse(_amountEditingController.text),
           _selectedDate,
           _selectedFuelType,
-          double.parse(_amountFuelPriceLiterEditingController.text));
+          double.parse(_amountFuelPriceLiterEditingController.text),
+          _notesTextController.text);
     } else {
       await _addFuelDetailViewModel.addNewFuelEntry(
           double.parse(_amountEditingController.text),
           _selectedDate,
           _selectedFuelType,
-          double.parse(_amountFuelPriceLiterEditingController.text));
+          double.parse(_amountFuelPriceLiterEditingController.text),
+          _notesTextController.text);
     }
     Navigator.pop(context);
   }

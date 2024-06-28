@@ -4,12 +4,12 @@ import 'package:petrolin/domain/model/fuel_entry.dart';
 class FuelEntryMapper {
   static FuelEntry transformToModel(final FuelEntryEntity data) {
     return FuelEntry(
-      id: data[FuelEntry.columnId],
-      fuelCost: data[FuelEntry.columnFuelCost],
-      fuelType: data[FuelEntry.columnFuelType],
-      entryTime: DateTime.parse(data[FuelEntry.columnEntryTime]),
-      fuelPerLiterCost: data[FuelEntry.columnFuelPerLiterCost],
-    );
+        id: data[FuelEntry.columnId],
+        fuelCost: data[FuelEntry.columnFuelCost],
+        fuelType: data[FuelEntry.columnFuelType],
+        entryTime: DateTime.parse(data[FuelEntry.columnEntryTime]),
+        fuelPerLiterCost: data[FuelEntry.columnFuelPerLiterCost],
+        notes: data[FuelEntry.columnNotes] ?? "");
   }
 
   static FuelEntryEntity transformToMap(final FuelEntry data) {
@@ -19,6 +19,7 @@ class FuelEntryMapper {
       FuelEntry.columnFuelType: data.fuelType,
       FuelEntry.columnEntryTime: data.entryTime.toIso8601String(),
       FuelEntry.columnFuelPerLiterCost: data.fuelPerLiterCost,
+      FuelEntry.columnNotes: data.notes
     };
   }
 

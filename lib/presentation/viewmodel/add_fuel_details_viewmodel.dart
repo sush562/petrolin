@@ -24,7 +24,7 @@ class AddFuelDetailViewModel {
   FuelPricePerLiter? dieselPerLiterPrice = null;
 
   Future<int> addNewFuelEntry(double fuelCost, DateTime currentTime,
-      String fuelType, double fuelPerLiterCost) async {
+      String fuelType, double fuelPerLiterCost, String notes) async {
     final AddNewFuelEntryUseCase prov =
         _ref.read(addNewFuelEntryUseCaseProvider);
     if (fuelType == petrol) {
@@ -74,8 +74,9 @@ class AddFuelDetailViewModel {
         }
       }
     }
-    final result =
-        await prov.execute(fuelCost, fuelType, currentTime, fuelPerLiterCost);
+    final FuelEntry entry = _getAddFuelEntryData(
+        fuelCost, currentTime, fuelType, fuelPerLiterCost, notes);
+    final result = await prov.execute(entry);
     _ref.read(homeViewModelNotifierProvider.notifier).updateValue();
     return result;
   }
@@ -90,19 +91,36 @@ class AddFuelDetailViewModel {
     return price;
   }
 
-  Future<void> updateFuelEntry(int id, double fuelCost, DateTime currentTime,
-      String fuelType, double fuelPerLiterCost) async {
+  Future<void> updateFuelEntry(int? id, double fuelCost, DateTime currentTime,
+      String fuelType, double fuelPerLiterCost, String notes) async {
     final UpdateFuelEntryUseCase prov =
         _ref.read(getUpdateFuelEntryUseCaseProvider);
-    final FuelEntry entry = FuelEntry(
+    final FuelEntry entry = _getFuelEntryData(
+        id, fuelCost, currentTime, fuelType, fuelPerLiterCost, notes);
+    await prov.execute(entry);
+    _ref.read(fuelEntryListViewmodelNotifier.notifier).updateValue();
+    _ref.read(homeViewModelNotifierProvider.notifier).updateValue();
+  }
+
+  FuelEntry _getFuelEntryData(int? id, double fuelCost, DateTime currentTime,
+      String fuelType, double fuelPerLiterCost, String notes) {
+    return FuelEntry(
         id: id,
         fuelCost: fuelCost,
         fuelType: fuelType,
         entryTime: currentTime,
-        fuelPerLiterCost: fuelPerLiterCost);
-    await prov.execute(entry);
-    _ref.read(fuelEntryListViewmodelNotifier.notifier).updateValue();
-    _ref.read(homeViewModelNotifierProvider.notifier).updateValue();
+        fuelPerLiterCost: fuelPerLiterCost,
+        notes: notes);
+  }
+
+  FuelEntry _getAddFuelEntryData(double fuelCost, DateTime currentTime,
+      String fuelType, double fuelPerLiterCost, String notes) {
+    return FuelEntry(
+        fuelCost: fuelCost,
+        fuelType: fuelType,
+        entryTime: currentTime,
+        fuelPerLiterCost: fuelPerLiterCost,
+        notes: notes);
   }
 
   Future<void> deleteEntry(int id) async {
