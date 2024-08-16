@@ -3,6 +3,7 @@ import 'package:petrolin/data/data_module.dart';
 import 'package:petrolin/domain/usecase/add_new_fuel_entry_usecase.dart';
 import 'package:petrolin/domain/usecase/add_update_fuel_per_liter_usecase.dart';
 import 'package:petrolin/domain/usecase/delete_fuel_entry_usecase.dart';
+import 'package:petrolin/domain/usecase/fetch_weather_data_usecase.dart';
 import 'package:petrolin/domain/usecase/get_fuel_entry_list_usecase.dart';
 import 'package:petrolin/domain/usecase/get_fuel_entry_usecase.dart';
 import 'package:petrolin/domain/usecase/get_fuel_price_per_liter_usecase.dart';
@@ -27,3 +28,6 @@ final getFuelPricePerLiterUseCaseProvider =
 final getAddUpdateFuelPerLiterUsecaseProvider =
     Provider<AddUpdateFuelPerLiterUsecase>((ref) =>
         AddUpdateFuelPerLiterUsecaseImpl(ref.watch(fuelRepositoryProvider)));
+
+final getFetchWeatherDataUseCaseProvider = Provider<FetchWeatherDataUsecase>(
+    (ref) => FetchWeatherDataUsecaseImpl(ref.watch(weatherRepositoryProvider)));

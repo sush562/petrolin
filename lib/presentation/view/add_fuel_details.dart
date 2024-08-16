@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:petrolin/data/entity/fuel_types.dart';
 import 'package:petrolin/presentation/viewmodel/add_fuel_details_viewmodel.dart';
+import 'package:petrolin/ui/text.dart';
 
 class AddPetrolDetailsScreen extends ConsumerStatefulWidget {
   final int id;
@@ -106,12 +107,10 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
         iconTheme: const IconThemeData(color: Colors.white),
-        title: Text(
-          widget.id > 0 ? "Update Fuel Details" : "Add Fuel Details",
-          style: const TextStyle(color: Colors.white),
-        ),
+        title: textAppBar(
+            widget.id > 0 ? "Update Fuel Details" : "Add Fuel Details",
+            context),
         actions: widget.id > 0
             ? [
                 IconButton(
@@ -224,7 +223,8 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
                               _submitFuelEntry(context);
                             }
                           },
-                          child: Text(widget.id > 0 ? 'Update' : 'Submit'),
+                          child: textSmall(
+                              widget.id > 0 ? 'Update' : 'Submit', context),
                         ),
                       )
                     ],

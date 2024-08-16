@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:petrolin/presentation/view/add_fuel_details.dart';
 import 'package:petrolin/presentation/viewmodel/fuel_entry_list_viewmodel.dart';
+import 'package:petrolin/ui/text.dart';
 
 class FuelEntryListScreen extends ConsumerWidget {
   const FuelEntryListScreen({super.key});
@@ -11,21 +12,14 @@ class FuelEntryListScreen extends ConsumerWidget {
     final viewmodel = ref.watch(fuelEntryListViewmodelNotifier);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
         iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text(
-          "Fuel Entries",
-          style: TextStyle(color: Colors.white),
-        ),
+        title: textAppBar("Fuel Entries", context),
       ),
       body: viewmodel.when(
         data: (fuelEntries) {
           if (fuelEntries.isEmpty) {
-            return const Center(
-              child: Text(
-                'No Entries',
-                style: TextStyle(fontSize: 18),
-              ),
+            return Center(
+              child: textSmall('No Entries', context),
             );
           }
           return ListView.builder(
@@ -35,18 +29,12 @@ class FuelEntryListScreen extends ConsumerWidget {
               return Card(
                 margin: const EdgeInsets.all(10.0),
                 child: ListTile(
-                  title: Text(
-                    style: const TextStyle(
-                      fontSize: 20,
-                    ),
-                    '${fuelEntry.fuelType} - Rs ${fuelEntry.fuelCost.toStringAsFixed(2)}',
-                  ),
-                  subtitle: Text(
-                    style: const TextStyle(
-                      fontSize: 18,
-                    ),
-                    '${fuelEntry.entryTime.toLocal()}'.split(' ')[0],
-                  ),
+                  title: textSmall(
+                      '${fuelEntry.fuelType} - Rs ${fuelEntry.fuelCost.toStringAsFixed(2)}',
+                      context),
+                  subtitle: textSmall(
+                      '${fuelEntry.entryTime.toLocal()}'.split(' ')[0],
+                      context),
                   onTap: () {
                     int fuelId = fuelEntry.id!;
                     Navigator.push(
