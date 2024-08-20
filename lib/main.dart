@@ -60,7 +60,10 @@ class MyApp extends StatelessWidget {
         ),
         textTheme: ThemeData().textTheme.copyWith(
               titleLarge: GoogleFonts.spectral(
-                  fontSize: 30, fontWeight: FontWeight.bold),
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: kColorScheme.primary,
+              ),
               titleSmall: GoogleFonts.spectral(
                   fontSize: 20,
                   fontWeight: FontWeight.normal,

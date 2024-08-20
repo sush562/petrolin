@@ -4,6 +4,8 @@ class LocationUtilty {
   Future<LocationData?> getLocation() async {
     Location location = Location();
 
+    await Future.delayed(const Duration(seconds: 2));
+
     bool serviceEnabled = await location.serviceEnabled();
     if (!serviceEnabled) {
       serviceEnabled = await location.requestService();
