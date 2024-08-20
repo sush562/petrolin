@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:petrolin/domain/model/weather.dart';
 import 'package:petrolin/domain/utility/location_utility.dart';
 import 'package:petrolin/presentation/viewmodel/weather_viewmodel.dart';
+import 'package:petrolin/ui/text.dart';
 
 class WeatherWidget extends ConsumerStatefulWidget {
   const WeatherWidget({super.key});
@@ -89,34 +90,49 @@ class _WeatherDisplayWidget extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Column(
-                children: [
-                  Icon(
-                    getWeatherIcon(),
-                    color: getWeatherIconColor(),
-                    size: 100,
-                  ),
-                  const Text(
-                    'WeatherApi.com',
-                    style: TextStyle(fontSize: 10, color: Colors.white),
-                  ),
-                ],
+              Expanded(
+                child: Column(
+                  children: [
+                    Icon(
+                      getWeatherIcon(),
+                      color: getWeatherIconColor(),
+                      size: 100,
+                    ),
+                    textSmall(
+                      'WeatherApi.com',
+                      context,
+                      fontSize: 10,
+                      textColor: Colors.white,
+                    ),
+                  ],
+                ),
               ),
-              Column(
-                children: [
-                  Text(
-                    data.current.condition.text,
-                    style: const TextStyle(fontSize: 20, color: Colors.white),
-                  ),
-                  Text(
-                    '${data.current.tempC}°',
-                    style: const TextStyle(fontSize: 40, color: Colors.white),
-                  ),
-                  Text(
-                    data.location.name,
-                    style: const TextStyle(fontSize: 20, color: Colors.white),
-                  )
-                ],
+              Expanded(
+                child: Column(
+                  children: [
+                    textSmall(
+                      data.current.condition.text,
+                      context,
+                      maxLines: 2,
+                      textOverflow: TextOverflow.ellipsis,
+                      textColor: Colors.white,
+                      fontSize: 12,
+                    ),
+                    textLarge(
+                      '${data.current.tempC}°',
+                      context,
+                      fontSize: 40,
+                      textColor: Colors.white,
+                    ),
+                    textSmall(
+                      data.location.name,
+                      context,
+                      maxLines: 1,
+                      textOverflow: TextOverflow.ellipsis,
+                      textColor: Colors.white,
+                    )
+                  ],
+                ),
               )
             ],
           ),
