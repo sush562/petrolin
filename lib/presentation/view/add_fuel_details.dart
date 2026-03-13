@@ -26,14 +26,12 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
   final TextEditingController _amountFuelPriceLiterEditingController =
       TextEditingController();
   final TextEditingController _notesTextController = TextEditingController();
-  late AddFuelDetailViewModel _addFuelDetailViewModel;
   bool _isLoading = true;
   double _fuelPricePerLiter = 0.0;
 
   @override
   void initState() {
     super.initState();
-    _addFuelDetailViewModel = ref.read(addFuelDetailsViewModelNotifier);
     _dateController =
         TextEditingController(text: "${_selectedDate.toLocal()}".split(' ')[0]);
     setState(() {
@@ -47,10 +45,15 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
   }
 
   void _loadFuelCosts() async {
-    await _addFuelDetailViewModel.loadDefaultFuelCosts();
-    if (_addFuelDetailViewModel.petrolPerLiterPrice != null) {
-      _fuelPricePerLiter =
-          _addFuelDetailViewModel.petrolPerLiterPrice!.fuelPerLiterCost;
+    await ref
+        .read(addFuelDetailViewModelProvider.notifier)
+        .loadDefaultFuelCosts();
+    if (ref.read(addFuelDetailViewModelProvider.notifier).petrolPerLiterPrice !=
+        null) {
+      _fuelPricePerLiter = ref
+          .read(addFuelDetailViewModelProvider.notifier)
+          .petrolPerLiterPrice!
+          .fuelPerLiterCost;
     }
     setState(() {
       _amountFuelPriceLiterEditingController.text =
@@ -60,7 +63,9 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
   }
 
   void _loadExistingEntry(int id) async {
-    final existingEntry = await _addFuelDetailViewModel.getFuelEntryById(id);
+    final existingEntry = await ref
+        .read(addFuelDetailViewModelProvider.notifier)
+        .getFuelEntryById(id);
     if (existingEntry != null) {
       setState(() {
         _amountEditingController.text = existingEntry.fuelCost.toString();
@@ -79,8 +84,9 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
   void _switchFuelType(String fuelType) {
     setState(() {
       _selectedFuelType = fuelType;
-      _fuelPricePerLiter =
-          _addFuelDetailViewModel.getFuelPrice(_selectedFuelType);
+      _fuelPricePerLiter = ref
+          .read(addFuelDetailViewModelProvider.notifier)
+          .getFuelPrice(_selectedFuelType);
       _amountFuelPriceLiterEditingController.text =
           _fuelPricePerLiter.toString();
     });
@@ -104,6 +110,7 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(addFuelDetailViewModelProvider);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -236,23 +243,31 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
   }
 
   void _submitFuelEntry(BuildContext context) async {
+    bool isLoaded = false;
     if (widget.id > 0) {
-      await _addFuelDetailViewModel.updateFuelEntry(
-          widget.id,
-          double.parse(_amountEditingController.text),
-          _selectedDate,
-          _selectedFuelType,
-          double.parse(_amountFuelPriceLiterEditingController.text),
-          _notesTextController.text);
+      isLoaded = await ref
+          .read(addFuelDetailViewModelProvider.notifier)
+          .updateFuelEntry(
+              widget.id,
+              double.parse(_amountEditingController.text),
+              _selectedDate,
+              _selectedFuelType,
+              double.parse(_amountFuelPriceLiterEditingController.text),
+              _notesTextController.text);
     } else {
-      await _addFuelDetailViewModel.addNewFuelEntry(
-          double.parse(_amountEditingController.text),
-          _selectedDate,
-          _selectedFuelType,
-          double.parse(_amountFuelPriceLiterEditingController.text),
-          _notesTextController.text);
+      int count = await ref
+          .read(addFuelDetailViewModelProvider.notifier)
+          .addNewFuelEntry(
+              double.parse(_amountEditingController.text),
+              _selectedDate,
+              _selectedFuelType,
+              double.parse(_amountFuelPriceLiterEditingController.text),
+              _notesTextController.text);
+      isLoaded = count > 0;
     }
-    Navigator.pop(context);
+    if (isLoaded) {
+      Navigator.pop(context);
+    }
   }
 
   void _showDeleteConfirmationDialog(BuildContext context) {
@@ -281,7 +296,7 @@ class _AddPetrolDetailsScreen extends ConsumerState<AddPetrolDetailsScreen> {
   }
 
   void _deleteEntry(int id, BuildContext context) async {
-    await _addFuelDetailViewModel.deleteEntry(id);
+    await ref.read(addFuelDetailViewModelProvider.notifier).deleteEntry(id);
     Navigator.pop(context);
   }
 }

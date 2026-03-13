@@ -6,10 +6,11 @@ import 'package:petrolin/domain/model/fuel_entry.dart';
 import 'package:petrolin/domain/usecase/get_fuel_entry_list_usecase.dart';
 
 final fuelEntryListViewmodelNotifier =
-    AsyncNotifierProvider.autoDispose<FuelEntryListViewmodel, List<FuelEntry>>(
-        FuelEntryListViewmodel.new);
+    AsyncNotifierProvider<FuelEntryListViewmodel, List<FuelEntry>>(
+        FuelEntryListViewmodel.new,
+        isAutoDispose: true);
 
-class FuelEntryListViewmodel extends AutoDisposeAsyncNotifier<List<FuelEntry>> {
+class FuelEntryListViewmodel extends AsyncNotifier<List<FuelEntry>> {
   @override
   FutureOr<List<FuelEntry>> build() async {
     return await _getFuelEntryList();

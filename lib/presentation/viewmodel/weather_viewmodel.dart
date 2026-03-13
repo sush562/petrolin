@@ -7,10 +7,10 @@ import 'package:petrolin/domain/model/weather.dart';
 import 'package:petrolin/domain/utility/location_utility.dart';
 
 final weatherViewModelNotifierProvider =
-    AsyncNotifierProvider.autoDispose<WeatherViewmodel, Weather>(
-        WeatherViewmodel.new);
+    AsyncNotifierProvider<WeatherViewmodel, Weather>(WeatherViewmodel.new,
+        isAutoDispose: true);
 
-class WeatherViewmodel extends AutoDisposeAsyncNotifier<Weather> {
+class WeatherViewmodel extends AsyncNotifier<Weather> {
   @override
   Future<Weather> build() {
     return _fetchWeatherData();

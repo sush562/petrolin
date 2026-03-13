@@ -4,9 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:petrolin/domain/domain_module.dart';
 
 final homeViewModelNotifierProvider =
-    AsyncNotifierProvider.autoDispose<HomeViewModel, double>(HomeViewModel.new);
+    AsyncNotifierProvider<HomeViewModel, double>(HomeViewModel.new,
+        isAutoDispose: true);
 
-class HomeViewModel extends AutoDisposeAsyncNotifier<double> {
+class HomeViewModel extends AsyncNotifier<double> {
   @override
   Future<double> build() async {
     return await _fetchTotalCost();
