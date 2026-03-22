@@ -12,7 +12,7 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final viewmodel = ref.watch(homeViewModelNotifierProvider);
+    final viewmodel = ref.watch(homeViewModelProvider);
     return Scaffold(
       appBar: AppBar(
         title: textAppBar("PetrolIn", context),

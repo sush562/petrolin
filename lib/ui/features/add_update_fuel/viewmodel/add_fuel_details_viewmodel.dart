@@ -25,8 +25,6 @@ class AddFuelDetailViewModel extends _$AddFuelDetailViewModel {
 
   Future<int> addNewFuelEntry(double fuelCost, DateTime currentTime,
       String fuelType, double fuelPerLiterCost, String notes) async {
-    final AddNewFuelEntryUseCase prov =
-        ref.read(addNewFuelEntryUseCaseProvider);
     if (fuelType == petrol) {
       if (petrolPerLiterPrice == null) {
         petrolPerLiterPrice = FuelPricePerLiter(
@@ -34,7 +32,7 @@ class AddFuelDetailViewModel extends _$AddFuelDetailViewModel {
             fuelType: petrol,
             entryTime: DateTime.now());
         await ref
-            .read(getAddUpdateFuelPerLiterUsecaseProvider)
+            .read(addUpdateFuelPerLiterUsecaseProvider)
             .execute(petrolPerLiterPrice!);
       } else {
         double cost = petrolPerLiterPrice!.fuelPerLiterCost;
@@ -46,7 +44,7 @@ class AddFuelDetailViewModel extends _$AddFuelDetailViewModel {
               fuelType: petrol,
               entryTime: DateTime.now());
           await ref
-              .read(getAddUpdateFuelPerLiterUsecaseProvider)
+              .read(addUpdateFuelPerLiterUsecaseProvider)
               .execute(petrolPerLiterPrice!);
         }
       }
@@ -57,7 +55,7 @@ class AddFuelDetailViewModel extends _$AddFuelDetailViewModel {
             fuelType: diesel,
             entryTime: DateTime.now());
         await ref
-            .read(getAddUpdateFuelPerLiterUsecaseProvider)
+            .read(addUpdateFuelPerLiterUsecaseProvider)
             .execute(dieselPerLiterPrice!);
       } else {
         double cost = dieselPerLiterPrice!.fuelPerLiterCost;
@@ -69,15 +67,17 @@ class AddFuelDetailViewModel extends _$AddFuelDetailViewModel {
               fuelType: diesel,
               entryTime: DateTime.now());
           await ref
-              .read(getAddUpdateFuelPerLiterUsecaseProvider)
+              .read(addUpdateFuelPerLiterUsecaseProvider)
               .execute(dieselPerLiterPrice!);
         }
       }
     }
     final FuelEntry entry = _getAddFuelEntryData(
         fuelCost, currentTime, fuelType, fuelPerLiterCost, notes);
+    final AddNewFuelEntryUseCase prov =
+        ref.read(addNewFuelEntryUseCaseProvider);
     final result = await prov.execute(entry);
-    ref.read(homeViewModelNotifierProvider.notifier).updateValue();
+    ref.read(homeViewModelProvider.notifier).updateValue();
     return result;
   }
 
@@ -94,12 +94,12 @@ class AddFuelDetailViewModel extends _$AddFuelDetailViewModel {
   Future<bool> updateFuelEntry(int? id, double fuelCost, DateTime currentTime,
       String fuelType, double fuelPerLiterCost, String notes) async {
     final UpdateFuelEntryUseCase prov =
-        ref.read(getUpdateFuelEntryUseCaseProvider);
+        ref.read(updateFuelEntryUseCaseProvider);
     final FuelEntry entry = _getFuelEntryData(
         id, fuelCost, currentTime, fuelType, fuelPerLiterCost, notes);
     await prov.execute(entry);
-    ref.read(fuelEntryListViewmodelNotifier.notifier).updateValue();
-    ref.read(homeViewModelNotifierProvider.notifier).updateValue();
+    ref.read(fuelEntryListViewmodelProvider.notifier).updateValue();
+    ref.read(homeViewModelProvider.notifier).updateValue();
     return true;
   }
 
@@ -128,8 +128,8 @@ class AddFuelDetailViewModel extends _$AddFuelDetailViewModel {
     final DeleteFuelEntryUseCase prov =
         ref.read(deleteFuelEntryUseCaseProvider);
     final result = prov.execute(id);
-    ref.read(fuelEntryListViewmodelNotifier.notifier).updateValue();
-    ref.read(homeViewModelNotifierProvider.notifier).updateValue();
+    ref.read(fuelEntryListViewmodelProvider.notifier).updateValue();
+    ref.read(homeViewModelProvider.notifier).updateValue();
     return result;
   }
 

@@ -9,7 +9,7 @@ class FuelEntryListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final viewmodel = ref.watch(fuelEntryListViewmodelNotifier);
+    final viewmodel = ref.watch(fuelEntryListViewmodelProvider);
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),

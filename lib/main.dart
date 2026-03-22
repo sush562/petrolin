@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:petrolin/ui/features/home/widgets/home.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const ProviderScope(
     child: MyApp(),
   ));

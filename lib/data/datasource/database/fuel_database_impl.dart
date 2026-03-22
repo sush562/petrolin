@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:petrolin/data/datasource/database/fuel_database.dart';
 import 'package:petrolin/data/datasource/entity/fuel_entity.dart';
 import 'package:petrolin/domain/model/fuel_entry.dart';
@@ -103,7 +102,6 @@ class FuelDatabaseImpl extends FuelDatabase {
   }
 
   Future<Database> _initDatabase() async {
-    WidgetsFlutterBinding.ensureInitialized();
     return openDatabase(join(await getDatabasesPath(), _databaseName),
         onCreate: (db, _) {
       db.execute('''

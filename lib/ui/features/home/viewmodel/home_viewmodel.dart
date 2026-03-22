@@ -1,13 +1,12 @@
 import 'dart:async';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:petrolin/domain/domain_module.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final homeViewModelNotifierProvider =
-    AsyncNotifierProvider<HomeViewModel, double>(HomeViewModel.new,
-        isAutoDispose: true);
+part 'home_viewmodel.g.dart';
 
-class HomeViewModel extends AsyncNotifier<double> {
+@riverpod
+class HomeViewModel extends _$HomeViewModel {
   @override
   Future<double> build() async {
     return await _fetchTotalCost();

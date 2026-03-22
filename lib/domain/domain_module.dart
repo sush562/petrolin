@@ -1,6 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:petrolin/data/data_module.dart';
-import 'package:petrolin/data/repository/impl/weather_repository_impl.dart';
 import 'package:petrolin/domain/usecase/add_new_fuel_entry_usecase.dart';
 import 'package:petrolin/domain/usecase/add_update_fuel_per_liter_usecase.dart';
 import 'package:petrolin/domain/usecase/delete_fuel_entry_usecase.dart';
@@ -14,27 +12,56 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'domain_module.g.dart';
 
-final getFuelEntryListUseCaseProvider = Provider<GetFuelEntryListUseCase>(
-    (ref) => GetFuelEntryListUseCaseImpl(ref.watch(fuelRepositoryProvider)));
-final getFuelEntryUseCaseProvider = Provider<GetFuelEntryUseCase>(
-    (ref) => GetFuelEntryUseCaseImpl(ref.watch(fuelRepositoryProvider)));
-final addNewFuelEntryUseCaseProvider = Provider<AddNewFuelEntryUseCase>(
-    (ref) => AddNewFuelEntryUseCaseImpl(ref.watch(fuelRepositoryProvider)));
-final deleteFuelEntryUseCaseProvider = Provider<DeleteFuelEntryUseCase>(
-    (ref) => DeleteFuelEntryUseCaseImpl(ref.watch(fuelRepositoryProvider)));
-final getTotalCostUseCaseProvider = Provider<GetTotalCostUseCase>(
-    (ref) => GetTotalCostUseCaseImpl(ref.watch(fuelRepositoryProvider)));
-final getUpdateFuelEntryUseCaseProvider = Provider<UpdateFuelEntryUseCase>(
-    (ref) => UpdateFuelEntryUseCaseImpl(ref.watch(fuelRepositoryProvider)));
-final getFuelPricePerLiterUseCaseProvider =
-    Provider<GetFuelPricePerLiterUseCase>((ref) =>
-        GetFuelPricePerLiterUseCaseImpl(ref.watch(fuelRepositoryProvider)));
-final getAddUpdateFuelPerLiterUsecaseProvider =
-    Provider<AddUpdateFuelPerLiterUsecase>((ref) =>
-        AddUpdateFuelPerLiterUsecaseImpl(ref.watch(fuelRepositoryProvider)));
-
 @riverpod
 FetchWeatherDataUsecase fetchWeatherDataUsecase(Ref ref) {
   final usecase = ref.watch(weatherRepositoryProvider);
   return FetchWeatherDataUsecaseImpl(usecase);
+}
+
+@riverpod
+GetTotalCostUseCase getTotalCostUseCase(Ref ref) {
+  final fuelRepo = ref.watch(fuelRepositoryProvider);
+  return GetTotalCostUseCaseImpl(fuelRepo);
+}
+
+@riverpod
+AddUpdateFuelPerLiterUsecase addUpdateFuelPerLiterUsecase(Ref ref) {
+  final fuelRepo = ref.watch(fuelRepositoryProvider);
+  return AddUpdateFuelPerLiterUsecaseImpl(fuelRepo);
+}
+
+@riverpod
+GetFuelPricePerLiterUseCase getFuelPricePerLiterUseCase(Ref ref) {
+  final fuelRepo = ref.watch(fuelRepositoryProvider);
+  return GetFuelPricePerLiterUseCaseImpl(fuelRepo);
+}
+
+@riverpod
+DeleteFuelEntryUseCase deleteFuelEntryUseCase(Ref ref) {
+  final fuelRepo = ref.watch(fuelRepositoryProvider);
+  return DeleteFuelEntryUseCaseImpl(fuelRepo);
+}
+
+@riverpod
+GetFuelEntryUseCase getFuelEntryUseCase(Ref ref) {
+  final fuelRepo = ref.watch(fuelRepositoryProvider);
+  return GetFuelEntryUseCaseImpl(fuelRepo);
+}
+
+@riverpod
+AddNewFuelEntryUseCase addNewFuelEntryUseCase(Ref ref) {
+  final fuelRepo = ref.watch(fuelRepositoryProvider);
+  return AddNewFuelEntryUseCaseImpl(fuelRepo);
+}
+
+@riverpod
+UpdateFuelEntryUseCase updateFuelEntryUseCase(Ref ref) {
+  final fuelRepo = ref.watch(fuelRepositoryProvider);
+  return UpdateFuelEntryUseCaseImpl(fuelRepo);
+}
+
+@riverpod
+GetFuelEntryListUseCase getFuelEntryListUseCase(Ref ref) {
+  final fuelRepo = ref.watch(fuelRepositoryProvider);
+  return GetFuelEntryListUseCaseImpl(fuelRepo);
 }

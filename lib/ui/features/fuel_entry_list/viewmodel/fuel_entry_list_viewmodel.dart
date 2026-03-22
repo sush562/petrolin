@@ -1,16 +1,14 @@
 import 'dart:async';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:petrolin/domain/domain_module.dart';
 import 'package:petrolin/domain/model/fuel_entry.dart';
 import 'package:petrolin/domain/usecase/get_fuel_entry_list_usecase.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final fuelEntryListViewmodelNotifier =
-    AsyncNotifierProvider<FuelEntryListViewmodel, List<FuelEntry>>(
-        FuelEntryListViewmodel.new,
-        isAutoDispose: true);
+part 'fuel_entry_list_viewmodel.g.dart';
 
-class FuelEntryListViewmodel extends AsyncNotifier<List<FuelEntry>> {
+@riverpod
+class FuelEntryListViewmodel extends _$FuelEntryListViewmodel {
   @override
   FutureOr<List<FuelEntry>> build() async {
     return await _getFuelEntryList();

@@ -1,6 +1,5 @@
 import 'package:petrolin/data/datasource/database/fuel_database.dart';
 import 'package:petrolin/data/datasource/database/fuel_database_impl.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:petrolin/data/datasource/weather_datasource.dart';
 import 'package:petrolin/data/repository/impl/fuel_repository_impl.dart';
 import 'package:petrolin/data/repository/impl/weather_repository_impl.dart';
@@ -10,14 +9,14 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'data_module.g.dart';
 
-final fuelDatabaseProvider = Provider<FuelDatabase>(
-  (_) => FuelDatabaseImpl(),
-);
-final fuelRepositoryProvider = Provider<FuelRepository>(
-  (ref) => FuelRepositoryImpl(
-    ref.watch(fuelDatabaseProvider),
-  ),
-);
+@riverpod
+FuelDatabase fuelDatabase(Ref ref) => FuelDatabaseImpl();
+
+@riverpod
+FuelRepository fuelRepository(Ref ref) {
+  final fuelDataBase = ref.watch(fuelDatabaseProvider);
+  return FuelRepositoryImpl(fuelDataBase);
+}
 
 @riverpod
 WeatherDataSource weatherDataSource(Ref ref) {
