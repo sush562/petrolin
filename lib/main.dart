@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:petrolin/presentation/view/home.dart';
+import 'package:petrolin/ui/features/home/widgets/home.dart';
 
 void main() {
   runApp(const ProviderScope(

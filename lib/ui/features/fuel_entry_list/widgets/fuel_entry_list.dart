@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:petrolin/presentation/view/add_fuel_details.dart';
-import 'package:petrolin/presentation/viewmodel/fuel_entry_list_viewmodel.dart';
-import 'package:petrolin/ui/text.dart';
+import 'package:petrolin/ui/features/add_update_fuel/widgets/add_fuel_details.dart';
+import 'package:petrolin/ui/features/fuel_entry_list/viewmodel/fuel_entry_list_viewmodel.dart';
+import 'package:petrolin/ui/core/ui/text.dart';
 
 class FuelEntryListScreen extends ConsumerWidget {
   const FuelEntryListScreen({super.key});

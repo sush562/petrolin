@@ -1,4 +1,4 @@
-import 'package:petrolin/domain/repository/fuel_repository.dart';
+import 'package:petrolin/data/repository/fuel_repository.dart';
 
 abstract class GetTotalCostUseCase {
   Future<double> execute();

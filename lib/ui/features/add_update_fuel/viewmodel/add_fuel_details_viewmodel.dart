@@ -7,8 +7,8 @@ import 'package:petrolin/domain/usecase/delete_fuel_entry_usecase.dart';
 import 'package:petrolin/domain/usecase/get_fuel_entry_usecase.dart';
 import 'package:petrolin/domain/usecase/get_fuel_price_per_liter_usecase.dart';
 import 'package:petrolin/domain/usecase/update_fuel_entry_usecase.dart';
-import 'package:petrolin/presentation/viewmodel/fuel_entry_list_viewmodel.dart';
-import 'package:petrolin/presentation/viewmodel/home_viewmodel.dart';
+import 'package:petrolin/ui/features/fuel_entry_list/viewmodel/fuel_entry_list_viewmodel.dart';
+import 'package:petrolin/ui/features/home/viewmodel/home_viewmodel.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'add_fuel_details_viewmodel.g.dart';

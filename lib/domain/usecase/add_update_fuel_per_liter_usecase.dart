@@ -1,5 +1,5 @@
 import 'package:petrolin/domain/model/fuel_price_per_liter.dart';
-import 'package:petrolin/domain/repository/fuel_repository.dart';
+import 'package:petrolin/data/repository/fuel_repository.dart';
 
 abstract class AddUpdateFuelPerLiterUsecase {
   Future<void> execute(FuelPricePerLiter entry);

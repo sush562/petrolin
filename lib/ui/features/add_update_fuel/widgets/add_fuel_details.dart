@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:petrolin/data/entity/fuel_types.dart';
-import 'package:petrolin/presentation/viewmodel/add_fuel_details_viewmodel.dart';
-import 'package:petrolin/ui/text.dart';
+import 'package:petrolin/ui/features/add_update_fuel/viewmodel/add_fuel_details_viewmodel.dart';
+import 'package:petrolin/ui/core/ui/text.dart';
 
 class AddPetrolDetailsScreen extends ConsumerStatefulWidget {
   final int id;

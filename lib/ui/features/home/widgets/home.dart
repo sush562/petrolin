@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:petrolin/presentation/view/add_fuel_details.dart';
-import 'package:petrolin/presentation/view/fuel_entry_list.dart';
-import 'package:petrolin/presentation/view/info.dart';
-import 'package:petrolin/presentation/view/weather_widget.dart';
-import 'package:petrolin/presentation/viewmodel/home_viewmodel.dart';
-import 'package:petrolin/ui/text.dart';
+import 'package:petrolin/ui/features/add_update_fuel/widgets/add_fuel_details.dart';
+import 'package:petrolin/ui/features/fuel_entry_list/widgets/fuel_entry_list.dart';
+import 'package:petrolin/ui/features/info/widgets/info.dart';
+import 'package:petrolin/ui/features/home/widgets/weather_widget.dart';
+import 'package:petrolin/ui/features/home/viewmodel/home_viewmodel.dart';
+import 'package:petrolin/ui/core/ui/text.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});

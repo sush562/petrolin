@@ -4,7 +4,7 @@ import 'package:petrolin/data/mapper/fuel_entry_mapper.dart';
 import 'package:petrolin/data/mapper/fuel_price_per_liter_mapper.dart';
 import 'package:petrolin/domain/model/fuel_entry.dart';
 import 'package:petrolin/domain/model/fuel_price_per_liter.dart';
-import 'package:petrolin/domain/repository/fuel_repository.dart';
+import 'package:petrolin/data/repository/fuel_repository.dart';
 
 class FuelRepositoryImpl extends FuelRepository {
   final FuelDatabase database;

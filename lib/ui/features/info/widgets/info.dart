@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petrolin/ui/text.dart';
+import 'package:petrolin/ui/core/ui/text.dart';
 
 class InfoScreen extends StatelessWidget {
   const InfoScreen({super.key});

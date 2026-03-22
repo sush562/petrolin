@@ -1,5 +1,5 @@
 import 'package:petrolin/domain/model/fuel_entry.dart';
-import 'package:petrolin/domain/repository/fuel_repository.dart';
+import 'package:petrolin/data/repository/fuel_repository.dart';
 
 abstract class GetFuelEntryListUseCase {
   Future<List<FuelEntry>> execute();

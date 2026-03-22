@@ -1,5 +1,5 @@
 import 'package:petrolin/domain/model/fuel_price_per_liter.dart';
-import 'package:petrolin/domain/repository/fuel_repository.dart';
+import 'package:petrolin/data/repository/fuel_repository.dart';
 
 abstract class GetFuelPricePerLiterUseCase {
   Future<FuelPricePerLiter?> execute(String fuelType);
