@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:location/location.dart';
 import 'package:petrolin/domain/domain_module.dart';
 import 'package:petrolin/domain/model/weather.dart';
-import 'package:petrolin/domain/utility/location_utility.dart';
+import 'package:petrolin/utils/location_utility.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'weather_viewmodel.g.dart';
@@ -26,7 +26,7 @@ class WeatherViewmodel extends _$WeatherViewmodel {
       } else {
         // Get the use case
         final fetchWeatherDataUsecase =
-            ref.read(getFetchWeatherDataUseCaseProvider);
+            ref.read(fetchWeatherDataUsecaseProvider);
 
         // Execute the use case to get the value
         final result = await fetchWeatherDataUsecase.execute(

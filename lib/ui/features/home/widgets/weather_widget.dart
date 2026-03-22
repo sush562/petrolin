@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:petrolin/domain/model/weather.dart';
-import 'package:petrolin/domain/utility/location_utility.dart';
+import 'package:petrolin/utils/location_utility.dart';
 import 'package:petrolin/ui/features/home/viewmodel/weather_viewmodel.dart';
 import 'package:petrolin/ui/core/ui/text.dart';
 
