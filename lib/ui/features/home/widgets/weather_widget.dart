@@ -15,21 +15,16 @@ class WeatherWidget extends ConsumerStatefulWidget {
 }
 
 class _WeatherWidgetState extends ConsumerState<WeatherWidget> {
-  late Future<Weather> _weatherData;
-
-  @override
-  void initState() {
-    super.initState();
-    _weatherData = ref.read(weatherViewModelNotifierProvider.future);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: _weatherData,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
+    final weather = ref.watch(weatherViewmodelProvider);
+
+    return weather.when(
+        data: (weatherData) => Center(
+                child: _WeatherDisplayWidget(
+              data: weatherData,
+            )),
+        loading: () => const Center(
               child: Column(
                 children: [
                   SizedBox(height: 8),
@@ -41,24 +36,14 @@ class _WeatherWidgetState extends ConsumerState<WeatherWidget> {
                   )
                 ],
               ),
-            ); // Show a loading spinner
-          } else if (snapshot.hasError) {
-            if (snapshot.error is LocationServiceDisabledException) {
-              return const Text(
-                  'Unable to display current weather data. Please enable GPS from device settings.');
-            }
-            if (snapshot.error is PermissionDeniedException) {
-              return const Text(
-                  'Unable to display current weather data. Please allow location permissions for app from device settings.');
-            } else {
-              return const Text('Unable to display current weather data.');
-            }
-          } else if (snapshot.hasData) {
-            return Center(
-              child: _WeatherDisplayWidget(
-                data: snapshot.data!,
-              ),
-            );
+            ),
+        error: (e, _) {
+          if (e is LocationServiceDisabledException) {
+            return const Text(
+                'Unable to display current weather data. Please enable GPS from device settings.');
+          } else if (e is PermissionDeniedException) {
+            return const Text(
+                'Unable to display current weather data. Please allow location permissions for app from device settings.');
           } else {
             return const Text('Unable to display current weather data.');
           }

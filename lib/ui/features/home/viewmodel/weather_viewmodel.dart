@@ -1,16 +1,15 @@
 import 'dart:async';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:location/location.dart';
 import 'package:petrolin/domain/domain_module.dart';
 import 'package:petrolin/domain/model/weather.dart';
 import 'package:petrolin/domain/utility/location_utility.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final weatherViewModelNotifierProvider =
-    AsyncNotifierProvider<WeatherViewmodel, Weather>(WeatherViewmodel.new,
-        isAutoDispose: true);
+part 'weather_viewmodel.g.dart';
 
-class WeatherViewmodel extends AsyncNotifier<Weather> {
+@riverpod
+class WeatherViewmodel extends _$WeatherViewmodel {
   @override
   Future<Weather> build() {
     return _fetchWeatherData();
