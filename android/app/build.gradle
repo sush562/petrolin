@@ -34,12 +34,10 @@ android {
 
     defaultConfig {
         applicationId "com.flutter.fuel.petrolin"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 29
         targetSdkVersion 36
-        versionCode 7
-        versionName '3.0.2'
+        versionCode 8
+        versionName '3.0.3'
     }
 
     signingConfigs {
